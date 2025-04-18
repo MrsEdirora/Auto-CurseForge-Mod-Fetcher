@@ -48,8 +48,12 @@ if not project_ids or not all(isinstance(pid, int) for pid in project_ids):
     print("Error: La lista de project_ids está vacía o contiene valores no válidos. Por favor, agrega IDs válidos.")
     exit()
 
+# Crear la subcarpeta 'output' si no existe
+output_dir = "output"
+os.makedirs(output_dir, exist_ok=True)
+
 # Archivo de salida
-output_file = "mods_info.csv"
+output_file = os.path.join(output_dir, "mods_info.csv")
 if os.path.exists(output_file):
     print(f"El archivo {output_file} ya existe. Cambiando el nombre...")
     base, ext = os.path.splitext(output_file)
@@ -69,6 +73,7 @@ for idx, pid in enumerate(project_ids, start=1):
             
             nombre = mod_data.get("name", f"Nombre no encontrado para ProjectID {pid}")
             resumen = mod_data.get("summary", f"Resumen no encontrado para ProjectID {pid}")
+            enlace = mod_data.get("links", {}).get("websiteUrl", f"https://www.curseforge.com/minecraft/mc-mods/{pid}")  # Obtener enlace desde la API
             
             categoria = clasificar_mod(resumen)
             
@@ -76,6 +81,7 @@ for idx, pid in enumerate(project_ids, start=1):
                 "ProjectID": pid,
                 "Nombre": nombre,
                 "Resumen": resumen,
+                "Enlace": enlace,
                 "Categoría": categoria
             })
             print(f"Procesado ProjectID {pid} - {nombre}")
@@ -86,6 +92,7 @@ for idx, pid in enumerate(project_ids, start=1):
                 "ProjectID": pid,
                 "Nombre": "Error HTTP",
                 "Resumen": "",
+                "Enlace": "",
                 "Categoría": ""
             })
     except requests.exceptions.Timeout:
@@ -94,6 +101,7 @@ for idx, pid in enumerate(project_ids, start=1):
             "ProjectID": pid,
             "Nombre": "Timeout",
             "Resumen": "",
+            "Enlace": "",
             "Categoría": ""
         })
     except requests.exceptions.RequestException as e:
@@ -102,6 +110,7 @@ for idx, pid in enumerate(project_ids, start=1):
             "ProjectID": pid,
             "Nombre": "Error de solicitud",
             "Resumen": "",
+            "Enlace": "",
             "Categoría": ""
         })
     except Exception as e:
@@ -110,6 +119,7 @@ for idx, pid in enumerate(project_ids, start=1):
             "ProjectID": pid,
             "Nombre": "Excepción al obtener",
             "Resumen": "",
+            "Enlace": "",
             "Categoría": ""
         })
         
@@ -119,7 +129,7 @@ for idx, pid in enumerate(project_ids, start=1):
 # Validar si hay datos antes de escribir el archivo CSV
 if datos_mods:
     with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
-        fieldnames = ["ProjectID", "Nombre", "Resumen", "Categoría"]
+        fieldnames = ["ProjectID", "Nombre", "Resumen", "Enlace", "Categoría"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for mod in datos_mods:

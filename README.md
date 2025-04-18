@@ -4,14 +4,24 @@ Este proyecto permite automatizar la obtención de información sobre mods de Mi
 
 ## Requisitos Previos
 
+Si no tienes Python ni las bibliotecas necesarias instaladas, puedes usar el archivo `setup.bat` para configurar todo automáticamente.
+
+### Configuración Automática
+
+1. Ejecuta el archivo `setup.bat` haciendo doble clic sobre él.
+2. Sigue las instrucciones en pantalla. Si Python no está instalado, se descargará automáticamente.
+3. Una vez completada la configuración, podrás ejecutar el programa.
+
+### Configuración Manual
+
 1. **Python 3.7 o superior**: Asegúrate de tener Python instalado en tu sistema.
 2. **Bibliotecas necesarias**: Instala las dependencias ejecutando:
    ```bash
-   pip install requests
+   pip install requests beautifulsoup4
    ```
 3. **Clave de API de CurseForge**: Necesitas una clave de API válida para acceder a la API de CurseForge. Solicítala desde [CurseForge API](https://docs.curseforge.com/).
 
-## Configuración
+## Configuración del Programa
 
 1. **Configurar la clave de API**:
    - El programa intentará cargar la clave de API desde la variable de entorno `CURSEFORGE_API_KEY`. Si no está configurada, te pedirá que la introduzcas manualmente al ejecutar el programa.
@@ -29,7 +39,8 @@ Este proyecto permite automatizar la obtención de información sobre mods de Mi
    python program.py
    ```
 2. El programa consultará la API de CurseForge para cada `project_id` en la lista y clasificará los mods según palabras clave en sus descripciones.
-3. Los resultados se guardarán en un archivo CSV llamado `mods_info.csv`.
+3. Los resultados se guardarán en un archivo CSV dentro de la subcarpeta `output`.
+4. El enlace directo a la página de CurseForge para cada mod se obtiene automáticamente desde la API.
 
 ## Manejo de Errores
 
@@ -38,6 +49,7 @@ El programa maneja los siguientes errores:
 - **Errores HTTP**: Muestra el código de estado y el contenido del error.
 - **Timeouts**: Registra un error si una solicitud excede el tiempo de espera.
 - **Lista de `project_ids` vacía o inválida**: El programa valida que la lista no esté vacía y que todos los elementos sean números enteros.
+- **Enlace no disponible en la API**: Si la API no proporciona un enlace directo, se genera un enlace predeterminado basado en el `projectID`.
 
 ## Créditos
 

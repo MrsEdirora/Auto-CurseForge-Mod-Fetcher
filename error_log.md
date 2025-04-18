@@ -51,6 +51,30 @@ El programa no puede continuar si la lista de `project_ids` está vacía o conti
 
 ---
 
+## Error: Enlace no disponible en la API
+
+### Descripción
+En algunos casos, la API de CurseForge no proporciona un enlace directo a la página del mod.
+
+### Soluciones Implementadas
+1. **Generación de un enlace predeterminado**:
+   - Si el enlace no está disponible en la API, se genera un enlace predeterminado basado en el `projectID`.
+
+---
+
+## Error: Timeout en la solicitud
+
+### Descripción
+El programa registra un error si una solicitud excede el tiempo de espera configurado.
+
+### Soluciones Implementadas
+1. **Aumento del tiempo de espera**:
+   - Se aumentó el tiempo de espera a 20 segundos para reducir la probabilidad de errores por timeout.
+2. **Manejo de errores claros**:
+   - Se agregó un mensaje que informa al usuario sobre el timeout y registra el error en el archivo CSV.
+
+---
+
 ## Error: Sintaxis incorrecta en operadores lógicos
 
 ### Descripción
